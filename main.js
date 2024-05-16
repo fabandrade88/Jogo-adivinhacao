@@ -1,34 +1,57 @@
+//Variaveis
+
 const screen1 = document.querySelector(".screen1")
 const screen2 = document.querySelector(".screen2")
+const btnTry = document.querySelector("#btnTry")
+const btnRest = document.querySelector("#btnReset")
 
-const randomNumber = Math.round(Math.random() * 10)
+let randomNumber = Math.round(Math.random() * 10)
 let xAttempts = 1
+
+//Eventos
+
+btnTry.addEventListener('click', handleClick)
+btnRest.addEventListener('click', handleResetClick)
+
+document.addEventListener('keydown', function(e) {
+  if(e.key == 'Enter' && screen1.classList.contains('hide')) {
+    handleResetClick()
+  }
+})
+
+//Funcao callback
 
 function handleClick(event) {
   event.preventDefault()
 
   const inputNumber = document.querySelector("#inputNumber")
 
-if(Number(inputNumber.value) == randomNumber) {
-  screen1.classList.add("hide")
-  screen2.classList.remove("hide")
-}
+  handleCheck()
 
-document.querySelector(".screen2 h2").innerText = `acertou em ${xAttempts} tentativas`
-
-inputNumber.value = ""
-xAttempts++
+  inputNumber.value = ""
+  xAttempts++
 
 }
 
-//Eventos
+function handleCheck() {
+  if (Number(inputNumber.value) < 0 || Number(inputNumber.value) > 10) {
+    alert("Escreva numero entre 0 e 10")
+ } 
+ 
+  if (Number(inputNumber.value) == randomNumber) {
+   toggleScreen()
+   screen2.querySelector("h2").innerText = `acertou em ${xAttempts} tentativas`
+ }
 
-const btnTry = document.querySelector("#btnTry")
-const btnRest = document.querySelector("#btnReset")
+}
 
-btnTry.addEventListener('click', handleClick)
-btnRest.addEventListener('click', function () {
-  screen1.classList.remove("hide")
-  screen2.classList.add("hide")
+function handleResetClick (){
+  toggleScreen()
   xAttempts = 1
-})
+  randomNumber = Math.round(Math.random() * 10)
+} 
+
+function toggleScreen() {
+  screen1.classList.toggle("hide")
+  screen2.classList.toggle("hide")
+}
